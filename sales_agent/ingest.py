@@ -73,7 +73,7 @@ def _normalize_cell(table: str, column: str, value: str) -> str | None:
 
 
 def _load_table(conn: sqlite3.Connection, table: str, csv_path: Path) -> None:
-    with csv_path.open(newline="", encoding="utf-8") as handle:
+    with csv_path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.reader(handle)
         header = next(reader)
         columns_sql = ", ".join(f'"{col}" TEXT' for col in header)

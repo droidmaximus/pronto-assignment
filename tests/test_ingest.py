@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from sales_agent.ingest import build_database
+from sales_agent.ingest import _load_table, build_database
 from sales_agent.runner import run_query
 
 ORDERS_HEADER = (
@@ -125,6 +125,24 @@ def csv_dir(tmp_path: Path) -> Path:
     )
     (root / "olist_geolocation_dataset.csv").write_text("geolocation_zip_code_prefix\n00000\n")
     return root
+
+
+def test_load_table_strips_utf8_bom_from_header(tmp_path: Path) -> None:
+    csv_path = tmp_path / "product_category_name_translation.csv"
+    csv_path.write_bytes(
+        b"\xef\xbb\xbfproduct_category_name,product_category_name_english\n"
+        b"beleza_saude,health_beauty\n"
+    )
+    conn = sqlite3.connect(":memory:")
+    try:
+        _load_table(conn, "category_translation", csv_path)
+        columns = [
+            row[1] for row in conn.execute("PRAGMA table_info(category_translation)")
+        ]
+        assert columns == ["product_category_name", "product_category_name_english"]
+        assert all("\ufeff" not in col for col in columns)
+    finally:
+        conn.close()
 
 
 def test_build_database_views_and_runner(csv_dir: Path, tmp_path: Path) -> None:
