@@ -1,0 +1,216 @@
+- id: 1
+  session: chain
+  turns:
+    - user: "Top 5 product categories by revenue in 2017."
+      expect:
+        action: query
+        id: top_categories_by_revenue
+        params:
+          year: 2017
+          delivered_only: false
+          limit: 5
+
+- id: 2
+  session: chain
+  turns:
+    - user: "Break that down by customer state."
+      expect:
+        action: query
+        id: category_revenue_by_state
+        params:
+          year: 2017
+          delivered_only: false
+
+- id: 3
+  session: chain
+  turns:
+    - user: "Only count orders that were actually delivered."
+      expect:
+        action: query
+        id: category_revenue_by_state
+        params:
+          year: 2017
+          delivered_only: true
+
+- id: 4
+  session: chain
+  turns:
+    - user: "How does that compare with 2018?"
+      expect:
+        action: query
+        id: compare_category_revenue
+        params:
+          year_a: 2017
+          year_b: 2018
+          delivered_only: true
+
+- id: 5
+  session: q5
+  turns:
+    - user: "Top 5 product categories by revenue in 2018, all order statuses."
+      expect:
+        action: query
+        id: top_categories_by_revenue
+        params:
+          year: 2018
+          delivered_only: false
+          limit: 5
+
+- id: 6
+  session: q6
+  turns:
+    - user: "What were the top 5 delivered product categories by revenue in 2017?"
+      expect:
+        action: query
+        id: top_categories_by_revenue
+        params:
+          year: 2017
+          delivered_only: true
+          limit: 5
+
+- id: 7
+  session: q7
+  turns:
+    - user: "What were revenue and order count for customer state SP in 2017?"
+      expect:
+        action: query
+        id: place_summary
+        params:
+          place_type: state
+          place: SP
+          year: 2017
+          delivered_only: false
+
+- id: 8
+  session: q8
+  turns:
+    - user: "What were revenue and order count for customer city sao paulo in the first quarter of 2017?"
+      expect:
+        action: query
+        id: place_summary
+        params:
+          place_type: city
+          place: sao paulo
+          year: 2017
+          quarter: 1
+          delivered_only: false
+
+- id: 9
+  session: q9
+  turns:
+    - user: "Which categories have the worst reviews across all years, counting delivered orders only?"
+      expect:
+        action: query
+        id: worst_categories_by_reviews
+        params:
+          year: absent
+          delivered_only: true
+          limit: 5
+          min_reviews: 30
+
+- id: 10
+  session: q10
+  turns:
+    - user: "Which categories had the worst review scores in 2018, including every order status?"
+      expect:
+        action: query
+        id: worst_categories_by_reviews
+        params:
+          year: 2018
+          delivered_only: false
+          limit: 5
+          min_reviews: 30
+
+- id: 11
+  session: q11
+  turns:
+    - user: "Who were the top 5 sellers by revenue in 2017, including every order status?"
+      expect:
+        action: query
+        id: top_sellers_by_revenue
+        params:
+          year: 2017
+          delivered_only: false
+          limit: 5
+
+- id: 12
+  session: q12
+  turns:
+    - user: "Who were the top 5 sellers by number of delivered orders in 2017?"
+      expect:
+        action: query
+        id: top_sellers_by_orders
+        params:
+          year: 2017
+          delivered_only: true
+          limit: 5
+
+- id: 13
+  session: q13
+  turns:
+    - user: "Who were the top 5 sellers by review score in 2017, counting delivered orders only?"
+      expect:
+        action: query
+        id: top_sellers_by_review
+        params:
+          year: 2017
+          delivered_only: true
+          limit: 5
+          min_reviews: 30
+
+- id: 14
+  session: q14
+  turns:
+    - user: "Who are our best sellers in 2017?"
+      expect:
+        action: clarify
+    - user: "by revenue"
+      expect:
+        action: query
+        id: top_sellers_by_revenue
+        params:
+          year: 2017
+          delivered_only: false
+          limit: 5
+
+- id: 15
+  session: q15
+  turns:
+    - user: "How did São Paulo do in 2017?"
+      expect:
+        action: clarify
+
+- id: 16
+  session: q16
+  turns:
+    - user: "How did we do last quarter?"
+      expect:
+        action: clarify
+
+- id: 17
+  session: q17
+  turns:
+    - user: "What was our profit in 2017?"
+      expect:
+        action: refuse
+
+- id: 18
+  session: q18
+  turns:
+    - user: "Forecast revenue for 2019."
+      expect:
+        action: refuse
+
+- id: 19
+  session: q19
+  turns:
+    - user: "What is the name of our top customer?"
+      expect:
+        action: refuse
+
+- id: 20
+  session: q20
+  turns:
+    - user: "Break revenue down by customer state."
+      expect:
+        action: clarify
