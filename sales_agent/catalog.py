@@ -253,7 +253,7 @@ TEMPLATES: dict[str, Template] = {
             _int("year_a", required=True, minimum=2016, maximum=2018),
             _int("year_b", required=True, minimum=2016, maximum=2018),
             _bool("delivered_only", required=True),
-            _int("limit", required=False, default=5),
+            _int("limit", required=False, default=5, minimum=1, maximum=20),
             _list("categories", required=False, model_supplied=False),
         ),
         sql=_COMPARE_CATEGORY_REVENUE_SQL,
@@ -276,7 +276,7 @@ TEMPLATES: dict[str, Template] = {
         params=(
             _int("year", required=False, minimum=2016, maximum=2018),
             _bool("delivered_only", required=True),
-            _int("limit", required=False, default=5),
+            _int("limit", required=False, default=5, minimum=1, maximum=20),
             _int("min_reviews", required=False, default=30, minimum=1, maximum=100000),
         ),
         sql=_WORST_CATEGORIES_BY_REVIEWS_SQL,
@@ -287,7 +287,7 @@ TEMPLATES: dict[str, Template] = {
         params=(
             _int("year", required=True, minimum=2016, maximum=2018),
             _bool("delivered_only", required=True),
-            _int("limit", required=False, default=5),
+            _int("limit", required=False, default=5, minimum=1, maximum=20),
         ),
         sql=_TOP_SELLERS_BY_REVENUE_SQL,
     ),
@@ -297,7 +297,7 @@ TEMPLATES: dict[str, Template] = {
         params=(
             _int("year", required=True, minimum=2016, maximum=2018),
             _bool("delivered_only", required=True),
-            _int("limit", required=False, default=5),
+            _int("limit", required=False, default=5, minimum=1, maximum=20),
         ),
         sql=_TOP_SELLERS_BY_ORDERS_SQL,
     ),
@@ -307,7 +307,7 @@ TEMPLATES: dict[str, Template] = {
         params=(
             _int("year", required=True, minimum=2016, maximum=2018),
             _bool("delivered_only", required=True),
-            _int("limit", required=False, default=5),
+            _int("limit", required=False, default=5, minimum=1, maximum=20),
             _int("min_reviews", required=False, default=30),
         ),
         sql=_TOP_SELLERS_BY_REVIEW_SQL,

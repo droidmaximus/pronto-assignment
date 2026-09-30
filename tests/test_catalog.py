@@ -26,6 +26,15 @@ def test_sql_uses_bound_parameters_only():
         assert "geolocation" not in template.sql
 
 
+def test_limit_params_have_bounds():
+    for template in list_templates():
+        for param in template.params:
+            if param.name != "limit":
+                continue
+            assert param.minimum == 1
+            assert param.maximum == 20
+
+
 def test_limit_and_min_reviews_defaults():
     top = get_template("top_categories_by_revenue")
     limit = next(param for param in top.params if param.name == "limit")
