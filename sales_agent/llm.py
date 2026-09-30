@@ -4,12 +4,15 @@ import os
 
 import httpx
 
+from sales_agent.envfile import load_local_env
+
 
 class LLMError(RuntimeError):
     pass
 
 
 def complete(messages: list[dict], timeout: float = 120) -> str:
+    load_local_env()
     token = os.environ.get("LM_API_TOKEN")
     if not token:
         raise LLMError("LM_API_TOKEN is not set.")

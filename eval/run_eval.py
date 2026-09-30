@@ -8,6 +8,7 @@ import yaml
 
 from eval.oracle import oracle_rows
 from sales_agent.agent import respond
+from sales_agent.envfile import load_local_env
 from sales_agent.llm import complete
 from sales_agent.parse import ParseError, parse_action
 from sales_agent.runner import run_query
@@ -158,6 +159,7 @@ def _turn_label(question_id: int, turn_index: int, turn_count: int) -> str:
 
 
 def main() -> None:
+    load_local_env()
     db_path = _DEFAULT_DB
     questions = load_questions()
     sessions: dict[str, Session] = {}
