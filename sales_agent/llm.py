@@ -26,8 +26,13 @@ def complete(messages: list[dict], timeout: float = 120) -> str:
     try:
         response = httpx.post(url, json=payload, headers=headers, timeout=timeout)
         response.raise_for_status()
+        data = response.json()
+        content = data["choices"][0]["message"]["content"]
     except httpx.HTTPError as exc:
         raise LLMError(f"The model is unreachable: {exc}") from exc
+    except (KeyError, IndexError, TypeError, ValueError) as exc:
+        raise LLMError(f"The model is unreachable: {exc}") from exc
 
-    data = response.json()
-    return data["choices"][0]["message"]["content"]
+    if not isinstance(content, str):
+        raise LLMError("The model is unreachable: empty response.")
+    return content

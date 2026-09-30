@@ -9,27 +9,26 @@ from sales_agent.llm import complete
 from sales_agent.session import Session
 
 
-def run_chat(lines, db_path: Path, complete_fn=complete) -> str:
+def run_chat(lines, db_path: Path, complete_fn=None, echo=None) -> str:
+    if complete_fn is None:
+        complete_fn = complete
     session = Session()
     replies: list[str] = []
     for line in lines:
-        if line == "":
+        user_message = line.rstrip("\n")
+        if user_message == "":
             break
-        reply = respond(session, line, db_path, complete_fn)
+        reply = respond(session, user_message, db_path, complete_fn)
         replies.append(reply)
+        if echo is not None:
+            echo(reply)
     return "\n".join(replies)
 
 
 def main() -> None:
     db_path = Path(os.environ.get("SALES_DB", "data/olist.sqlite"))
     print("Sales analytics chat. Enter a blank line to exit.")
-    session = Session()
-    for line in sys.stdin:
-        user_message = line.rstrip("\n")
-        if user_message == "":
-            break
-        reply = respond(session, user_message, db_path)
-        print(reply)
+    run_chat(sys.stdin, db_path, echo=print)
 
 
 if __name__ == "__main__":

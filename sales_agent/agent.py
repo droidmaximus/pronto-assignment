@@ -14,6 +14,10 @@ from sales_agent.session import Session, resolve_params
 _PARSE_FAILURE = "I couldn't map that question to the catalog."
 _MISSING_DB = "The database is missing. Run python -m sales_agent.ingest."
 _QUERY_FAILED = "The query failed. No number is available."
+_RETRY = (
+    "That was not a JSON action. Reply with exactly one JSON object and no SQL. "
+    "Use action, id, and params."
+)
 
 
 def system_prompt() -> str:
@@ -33,10 +37,13 @@ def system_prompt() -> str:
         "- Years in the data are 2016 through 2018.",
         "",
         "Behavior rules:",
-        "- Set delivered_only to false unless the user asks for delivered orders.",
-        "- Include year when the template requires it.",
+        "- Set delivered_only to false unless the user asks for delivered orders. "
+        "Always include it. When the user asks for delivered orders, set it to true.",
+        "- Include year when the template requires it. For worst_categories_by_reviews, "
+        "omit year when the user wants every year, and do not ask which year.",
         "- For a follow-up that only changes a filter, repeat the last template id "
-        "shown in the session summary.",
+        "shown in the session summary and include the changed parameter.",
+        "- Never reply with SQL.",
         "- Use compare_category_revenue when the user compares years, and include year_b.",
         "- If the user asks for best sellers without revenue, orders, or review score, "
         "clarify and offer those three.",
@@ -80,13 +87,18 @@ def _parse_with_retry(
     except (ParseError, json.JSONDecodeError) as first_err:
         retry_messages = messages + [
             {"role": "assistant", "content": text},
-            {"role": "user", "content": str(first_err)},
+            {"role": "user", "content": _RETRY},
         ]
         text2 = complete_fn(retry_messages)
         try:
             return parse_action(text2), None
         except (ParseError, json.JSONDecodeError):
             return None, _PARSE_FAILURE
+
+
+def _query_memory(query_id: str, params: dict) -> str:
+    visible = {key: value for key, value in params.items() if key != "categories"}
+    return f"Ran {query_id} with {visible!r}."
 
 
 def _append_turn(session: Session, user_message: str, assistant_message: str) -> None:
@@ -164,8 +176,9 @@ def respond(
         reply = format_reply(result)
         session.last_query_id = query_id
         session.last_params = dict(result.params)
+        session.queries_run += 1
         _remember_categories(session, result.columns, result.rows)
-        _append_turn(session, user_message, reply)
+        _append_turn(session, user_message, _query_memory(query_id, result.params))
         return reply
     except LLMError as exc:
         return str(exc)

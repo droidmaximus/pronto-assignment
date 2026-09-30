@@ -15,6 +15,45 @@ def test_system_prompt_lists_catalog_without_answers():
         assert template.id in text
     assert "400.0" not in text
     assert "Expected answer" not in text
+    assert "omit for all years" in text
+    assert "false unless the user asks for delivered orders" in text
+
+
+def test_model_history_omits_executed_sql():
+    def complete_fn(_messages):
+        return (
+            '{"action":"query","id":"top_categories_by_revenue",'
+            '"params":{"year":2017,"delivered_only":false,"limit":5}}'
+        )
+
+    session = Session()
+    reply = respond(session, "Top categories", FIXTURE, complete_fn)
+    assert "```sql" in reply
+    assert "```sql" not in session.turns[-1]["content"]
+    assert "top_categories_by_revenue" in session.turns[-1]["content"]
+
+
+def test_sql_reply_retries_with_a_json_instruction():
+    seen: list[list[dict]] = []
+    responses = iter(
+        [
+            "```sql\nSELECT 1\n```",
+            (
+                '{"action":"query","id":"top_categories_by_revenue",'
+                '"params":{"year":2017,"delivered_only":false,"limit":5}}'
+            ),
+        ]
+    )
+
+    def complete_fn(messages):
+        seen.append(messages)
+        return next(responses)
+
+    reply = respond(Session(), "Top categories", FIXTURE, complete_fn)
+    assert "watches" in reply
+    retry = seen[1][-1]["content"]
+    assert "Expecting value" not in retry
+    assert "JSON" in retry
 
 
 def test_query_then_follow_up_breakdown():

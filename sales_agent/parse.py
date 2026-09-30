@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import re
 
+from sales_agent.catalog import get_template
+
 _VALID_ACTIONS = frozenset({"query", "clarify", "refuse"})
 
 
@@ -12,12 +14,27 @@ class ParseError(ValueError):
 
 def _strip_fence(text: str) -> str:
     stripped = text.strip()
-    if not stripped.startswith("```"):
-        return stripped
-    match = re.match(r"^```[^\n]*\n(.*)\n```\s*$", stripped, re.DOTALL)
+    match = re.search(r"```[^\n]*\n(.*?)```", stripped, re.DOTALL)
     if match:
         return match.group(1).strip()
-    return stripped
+    start = stripped.find("{")
+    if start == -1:
+        return stripped
+    try:
+        _obj, end = json.JSONDecoder().raw_decode(stripped[start:])
+    except json.JSONDecodeError:
+        return stripped
+    return stripped[start : start + end]
+
+
+def _known_template(query_id: object) -> bool:
+    if not isinstance(query_id, str):
+        return False
+    try:
+        get_template(query_id)
+    except KeyError:
+        return False
+    return True
 
 
 def parse_action(text: str) -> dict:
@@ -26,6 +43,10 @@ def parse_action(text: str) -> dict:
         raise ParseError("expected a JSON object")
 
     action = raw.get("action")
+    if action not in _VALID_ACTIONS and _known_template(action):
+        raw = dict(raw)
+        raw.setdefault("id", action)
+        action = "query"
     if action not in _VALID_ACTIONS:
         raise ParseError(f"unknown action: {action!r}")
 

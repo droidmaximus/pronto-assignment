@@ -1,7 +1,10 @@
+import io
+import sys
 from pathlib import Path
-from sales_agent.chat import run_chat
 
-FIXTURE = Path("tests/fixtures/olist_fixture.sqlite")
+from sales_agent.chat import main, run_chat
+
+FIXTURE = Path(__file__).resolve().parent / "fixtures" / "olist_fixture.sqlite"
 
 
 def test_two_turns_then_blank_line_exits():
@@ -20,3 +23,18 @@ def test_two_turns_then_blank_line_exits():
     )
     assert "watches" in transcript
     assert "review score" in transcript
+
+
+def test_main_prints_replies_from_stdin(monkeypatch, capsys):
+    monkeypatch.setenv("SALES_DB", str(FIXTURE))
+    monkeypatch.setattr(
+        "sales_agent.chat.complete",
+        lambda _messages: (
+            '{"action":"query","id":"top_categories_by_revenue",'
+            '"params":{"year":2017,"delivered_only":false,"limit":5}}'
+        ),
+    )
+    monkeypatch.setattr(sys, "stdin", io.StringIO("Top categories in 2017\n\n"))
+    main()
+    output = capsys.readouterr().out
+    assert "watches" in output

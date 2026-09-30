@@ -61,6 +61,61 @@ def test_grade_turn_passes_question_1(fixture_connection):
     ) == agent.rows
 
 
+def test_stale_query_does_not_satisfy_a_new_turn(fixture_connection):
+    session = Session(
+        last_query_id="top_categories_by_revenue",
+        last_params={"year": 2017, "delivered_only": False, "limit": 5},
+        queries_run=1,
+    )
+
+    def complete_fn(_messages):
+        return '{"action":"clarify","question":"Which categories should I include?"}'
+
+    result = grade_turn(
+        fixture_connection,
+        session,
+        "Break that down by customer state.",
+        FIXTURE_DB,
+        {
+            "action": "query",
+            "id": "top_categories_by_revenue",
+            "params": {"year": 2017, "delivered_only": False, "limit": 5},
+        },
+        complete_fn,
+    )
+    assert not result.passed
+    assert session.queries_run == 1
+
+
+def test_repeating_the_same_template_still_counts(fixture_connection):
+    session = Session(
+        last_query_id="top_categories_by_revenue",
+        last_params={"year": 2017, "delivered_only": False, "limit": 5},
+        queries_run=1,
+    )
+
+    def complete_fn(_messages):
+        return (
+            '{"action":"query","id":"top_categories_by_revenue",'
+            '"params":{"year":2017,"delivered_only":false,"limit":5}}'
+        )
+
+    result = grade_turn(
+        fixture_connection,
+        session,
+        "Top 5 product categories by revenue in 2017.",
+        FIXTURE_DB,
+        {
+            "action": "query",
+            "id": "top_categories_by_revenue",
+            "params": {"year": 2017, "delivered_only": False, "limit": 5},
+        },
+        complete_fn,
+    )
+    assert result.passed, result.note
+    assert session.queries_run == 2
+
+
 def test_grade_turn_fails_on_wrong_template_id(fixture_connection):
     questions = load_questions()
     q1 = questions[0]

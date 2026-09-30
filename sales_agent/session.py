@@ -11,6 +11,7 @@ class Session:
     last_query_id: str | None = None
     last_params: dict = field(default_factory=dict)
     last_categories: list[str] = field(default_factory=list)
+    queries_run: int = 0
 
 
 def resolve_params(

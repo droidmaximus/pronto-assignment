@@ -33,13 +33,14 @@ def load_questions() -> list[dict]:
     return data
 
 
-def _format_action(parsed_action: dict | None, session: Session) -> str:
+def _format_action(parsed_action: dict | None, session: Session, executed: bool) -> str:
     if parsed_action is None:
         return "parse_failure"
     if parsed_action["action"] == "query":
-        if session.last_query_id is not None:
+        if executed:
             return f"query:{session.last_query_id}"
-        return "query:?"
+        query_id = parsed_action.get("id") or "?"
+        return f"query:{query_id} (not run)"
     return parsed_action["action"]
 
 
@@ -79,7 +80,7 @@ def grade_turn(
     complete_fn,
 ) -> GradeResult:
     expected_action = _format_expected(expect)
-    prior_query_id = session.last_query_id
+    prior_queries = session.queries_run
     parsed_action: dict | None = None
 
     def wrapping_complete(messages):
@@ -92,10 +93,11 @@ def grade_turn(
         return text
 
     respond(session, user_message, db_path, wrapping_complete)
-    actual_action = _format_action(parsed_action, session)
+    executed = session.queries_run > prior_queries
+    actual_action = _format_action(parsed_action, session, executed)
 
     if expect["action"] == "query":
-        if session.last_query_id != expect["id"]:
+        if not executed or session.last_query_id != expect["id"]:
             return GradeResult(
                 passed=False,
                 expected_action=expected_action,
@@ -127,7 +129,7 @@ def grade_turn(
             note="ok",
         )
 
-    if session.last_query_id != prior_query_id:
+    if executed:
         return GradeResult(
             passed=False,
             expected_action=expected_action,

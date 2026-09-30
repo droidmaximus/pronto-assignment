@@ -1,14 +1,14 @@
 | id | result | expected | actual | note |
 | --- | --- | --- | --- | --- |
 | 1 | pass | query:top_categories_by_revenue | query:top_categories_by_revenue | ok |
-| 2 | fail | query:category_revenue_by_state | clarify | unexpected template id |
-| 3 | fail | query:category_revenue_by_state | query:top_categories_by_revenue | unexpected template id |
-| 4 | fail | query:compare_category_revenue | clarify | unexpected template id |
+| 2 | pass | query:category_revenue_by_state | query:category_revenue_by_state | ok |
+| 3 | pass | query:category_revenue_by_state | query:category_revenue_by_state | ok |
+| 4 | pass | query:compare_category_revenue | query:compare_category_revenue | ok |
 | 5 | pass | query:top_categories_by_revenue | query:top_categories_by_revenue | ok |
 | 6 | pass | query:top_categories_by_revenue | query:top_categories_by_revenue | ok |
-| 7 | fail | query:place_summary | query:? | unexpected template id |
+| 7 | pass | query:place_summary | query:place_summary | ok |
 | 8 | pass | query:place_summary | query:place_summary | ok |
-| 9 | fail | query:worst_categories_by_reviews | clarify | unexpected template id |
+| 9 | pass | query:worst_categories_by_reviews | query:worst_categories_by_reviews | ok |
 | 10 | pass | query:worst_categories_by_reviews | query:worst_categories_by_reviews | ok |
 | 11 | pass | query:top_sellers_by_revenue | query:top_sellers_by_revenue | ok |
 | 12 | pass | query:top_sellers_by_orders | query:top_sellers_by_orders | ok |

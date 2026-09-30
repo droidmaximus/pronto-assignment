@@ -336,6 +336,10 @@ def get_template(query_id: str) -> Template:
 
 
 def _format_param_default(param: Param) -> str:
+    if param.name == "delivered_only":
+        return "delivered_only (required; false unless the user asks for delivered orders)"
+    if param.name == "year" and not param.required:
+        return "year (optional; omit for all years)"
     if param.default is not MISSING:
         return f"{param.name}={param.default!r}"
     return param.name
