@@ -1,0 +1,39 @@
+{
+  "all_2017": {
+    "params": {
+      "year": 2017,
+      "delivered_only": false,
+      "categories": ["watches", "sports_leisure", "health_beauty", "bed_bath", "toys"]
+    },
+    "columns": ["category", "state", "revenue"],
+    "rows": [
+      ["bed_bath", "SP", 90.0],
+      ["health_beauty", "SP", 210.0],
+      ["health_beauty", "RJ", 80.0],
+      ["sports_leisure", "RJ", 200.0],
+      ["sports_leisure", "SP", 55.0],
+      ["sports_leisure", "MG", 40.0],
+      ["toys", "SP", 40.0],
+      ["toys", "PR", 8.0],
+      ["watches", "BA", 400.0]
+    ]
+  },
+  "delivered_2017": {
+    "params": {
+      "year": 2017,
+      "delivered_only": true,
+      "categories": ["watches", "sports_leisure", "health_beauty", "bed_bath", "toys"]
+    },
+    "columns": ["category", "state", "revenue"],
+    "rows": [
+      ["bed_bath", "SP", 70.0],
+      ["health_beauty", "SP", 210.0],
+      ["sports_leisure", "RJ", 200.0],
+      ["sports_leisure", "SP", 55.0],
+      ["sports_leisure", "MG", 40.0],
+      ["toys", "SP", 30.0],
+      ["toys", "PR", 8.0],
+      ["watches", "BA", 400.0]
+    ]
+  }
+}

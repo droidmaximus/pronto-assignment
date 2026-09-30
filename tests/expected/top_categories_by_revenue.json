@@ -1,0 +1,12 @@
+{
+  "all_2017": {
+    "params": {"year": 2017, "delivered_only": false, "limit": 5},
+    "columns": ["category", "revenue"],
+    "rows": [["watches", 400.0], ["sports_leisure", 295.0], ["health_beauty", 290.0], ["bed_bath", 90.0], ["toys", 48.0]]
+  },
+  "delivered_2017": {
+    "params": {"year": 2017, "delivered_only": true, "limit": 5},
+    "columns": ["category", "revenue"],
+    "rows": [["watches", 400.0], ["sports_leisure", 295.0], ["health_beauty", 210.0], ["bed_bath", 70.0], ["toys", 38.0]]
+  }
+}

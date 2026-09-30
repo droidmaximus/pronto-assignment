@@ -1,0 +1,24 @@
+{
+  "top2_all": {
+    "params": {"year_a": 2017, "year_b": 2018, "delivered_only": false, "limit": 2},
+    "columns": ["category", "revenue_a", "revenue_b"],
+    "rows": [["watches", 400.0, 0.0], ["sports_leisure", 295.0, 90.0]]
+  },
+  "session_categories_delivered": {
+    "params": {
+      "year_a": 2017,
+      "year_b": 2018,
+      "delivered_only": true,
+      "limit": 5,
+      "categories": ["watches", "sports_leisure", "health_beauty", "bed_bath", "toys"]
+    },
+    "columns": ["category", "revenue_a", "revenue_b"],
+    "rows": [
+      ["watches", 400.0, 0.0],
+      ["sports_leisure", 295.0, 90.0],
+      ["health_beauty", 210.0, 120.0],
+      ["bed_bath", 70.0, 0.0],
+      ["toys", 38.0, 15.0]
+    ]
+  }
+}

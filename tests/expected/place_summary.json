@@ -1,0 +1,28 @@
+{
+  "sp_2017": {
+    "params": {"place_type": "state", "place": "sp", "year": 2017, "delivered_only": false},
+    "columns": ["revenue", "order_count"],
+    "rows": [[395.0, 8]]
+  },
+  "sao_paulo_q1": {
+    "params": {
+      "place_type": "city",
+      "place": "sao paulo",
+      "year": 2017,
+      "quarter": 1,
+      "delivered_only": false
+    },
+    "columns": ["revenue", "order_count"],
+    "rows": [[320.0, 4]]
+  },
+  "accented_city": {
+    "params": {
+      "place_type": "city",
+      "place": "São Paulo",
+      "year": 2017,
+      "delivered_only": false
+    },
+    "columns": ["revenue", "order_count"],
+    "rows": [[null, 0]]
+  }
+}

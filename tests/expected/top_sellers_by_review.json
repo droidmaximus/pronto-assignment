@@ -1,0 +1,7 @@
+{
+  "delivered_2017": {
+    "params": {"year": 2017, "delivered_only": true, "limit": 5, "min_reviews": 1},
+    "columns": ["seller_id", "avg_review", "reviewed_orders"],
+    "rows": [["s4", 4.5, 2], ["s1", 4.33, 3], ["s2", 4.0, 3], ["s3", 3.5, 2], ["s5", 2.0, 2]]
+  }
+}

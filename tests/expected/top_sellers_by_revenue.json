@@ -1,0 +1,7 @@
+{
+  "all_2017": {
+    "params": {"year": 2017, "delivered_only": false, "limit": 5},
+    "columns": ["seller_id", "revenue"],
+    "rows": [["s4", 400.0], ["s2", 385.0], ["s1", 260.0], ["s3", 70.0], ["s5", 20.0]]
+  }
+}

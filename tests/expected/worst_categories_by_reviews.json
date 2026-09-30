@@ -1,0 +1,18 @@
+{
+  "delivered_all_years": {
+    "params": {"delivered_only": true, "limit": 5, "min_reviews": 1},
+    "columns": ["category", "avg_review", "reviewed_orders"],
+    "rows": [
+      ["unknown", 1.0, 1],
+      ["toys", 2.0, 3],
+      ["sports_leisure", 3.8, 5],
+      ["bed_bath", 4.0, 1],
+      ["watches", 4.5, 2]
+    ]
+  },
+  "year_2018_all_status": {
+    "params": {"year": 2018, "delivered_only": false, "limit": 5, "min_reviews": 1},
+    "columns": ["category", "avg_review", "reviewed_orders"],
+    "rows": [["toys", 1.0, 1], ["sports_leisure", 2.0, 1], ["health_beauty", 3.0, 2]]
+  }
+}
