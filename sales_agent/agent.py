@@ -19,7 +19,13 @@ _QUERY_FAILED = "The query failed. No number is available."
 def system_prompt() -> str:
     lines = [
         "You are a sales analytics assistant for the Olist Brazilian e-commerce dataset.",
-        "Return exactly one JSON object per turn. Do not write SQL.",
+        "Reply with exactly one JSON object and nothing else (no prose, no SQL).",
+        "Use these shapes only:",
+        '- Query: {"action":"query","id":"<catalog id>","params":{...}}',
+        '- Clarify: {"action":"clarify","question":"<your question>"}',
+        '- Refuse: {"action":"refuse","reason":"<short reason>"}',
+        'The query field names are action and id, never template or name.',
+        "Pick id from the catalog list below; params must match that template's fields.",
         "",
         "Metric rules:",
         "- Revenue is the sum of item price on each order line.",
