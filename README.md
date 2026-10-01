@@ -2,6 +2,10 @@
 
 Local terminal agent for multi-turn analytics over the [Olist Brazilian e-commerce](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) dataset. Answers come from allowlisted SQL only; the model picks the query, not the numbers.
 
+## Walkthrough
+
+[Five-minute project walkthrough](Avinash-submission.mp4)
+
 ## Setup
 
 1. **Python 3.11** — create a virtual environment and install dependencies:
